@@ -3,7 +3,6 @@ const cheerio = require('cheerio');
 const express = require('express');
 const app = express();
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -35,7 +34,6 @@ app.get('/search/:title', async(req, res) => {
         return;
     }
 
-
 });
 
 app.get('/comic/:title', async(req, res) => {
@@ -54,11 +52,13 @@ app.get('/comic/:title', async(req, res) => {
 
     const comics = [];
 
-    const getImage = $('.list-container').find('.img-responsive').attr('src');
-    const getSummary = $('div.manga.well p').text().trim();
+    const getTitle = $('.listmanga-header').eq(0).text().trim();
+    const getSummary = $('div.manga.well p').text().trim().replace(/\r?\n|\r/g, " ");
+    const getImage = $('.boxed img').attr('src');
+    const getAuthors = $('.dl-horizontal dd').eq(3).text().trim();
 
+    // Chapters Object
     const chapters = [];
-
     const listChapters = $('ul.chapters li').each((i, item) => {
         const $item = $(item);
         const chapterTitle = $item.find('.chapter-title-rtl').text().trim();
@@ -73,11 +73,28 @@ app.get('/comic/:title', async(req, res) => {
         chapters.push(chapter);
     });
 
+    // Tags Object
+    const tags = [];
+
+    const listTags = $('.tag-links a').each((i, item) => {
+        const $item = $(item);
+        const tagName = $item.text();
+
+        const tag = {
+            name: tagName
+        }
+
+        tags.push(tag);
+    });
+
+
     const comic = {
-        title: title,
+        title: getTitle,
         image: getImage,
+        authors: getAuthors,
+        tags: tags,
         summary: getSummary,
-        chapters
+        chapters,
     };
 
     comics.push(comic);
