@@ -23,7 +23,7 @@ app.get('/search/:title', async(req, res) => {
         for (let i = 0; i < results.length; i++) {
             const comic = {
                 title: results[i].value,
-                link: `http://read-comimc.herokuapp.com/comic/${results[i].data}`
+                link: `https://read-comimc.herokuapp.com/comic/${results[i].data}`
             }
             comics.push(comic);
         }
@@ -63,7 +63,7 @@ app.get('/comic/:title', async(req, res) => {
         const $item = $(item);
         const chapterTitle = $item.find('.chapter-title-rtl').text().trim();
         const chapterLink = $item.find('.chapter-title-rtl a').attr('href');
-        const link = `http://read-comimc.herokuapp.com/comic/${title}/${chapterLink.substr(chapterLink.lastIndexOf('/') + 1)}`;
+        const link = `https://read-comimc.herokuapp.com/comic/${title}/${chapterLink.substr(chapterLink.lastIndexOf('/') + 1)}`;
         const uploadDate = $item.find('.date-chapter-title-rtl').text().trim()
         const chapter = {
             title: chapterTitle,
