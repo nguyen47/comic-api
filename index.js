@@ -123,8 +123,13 @@ app.get('/comic/:title/:chapter', async(req, res) => {
     const pages = [];
     const listPages = $('#all img').each((i, item) => {
         const $item = $(item);
-        const images = $item.attr('data-src').trim();
-        pages.push(images);
+        const id = i;
+        const image = $item.attr('data-src').trim();
+        const page = {
+            id,
+            image
+        }
+        pages.push(page);
     });
     res.send(pages);
 })
@@ -132,5 +137,5 @@ app.get('/comic/:title/:chapter', async(req, res) => {
 
 var server = app.listen(process.env.PORT || 3000, function() {
     var port = server.address().port;
-    console.log("Express is working on port " + port);
+    console.log("Server is working on port " + port);
 });
